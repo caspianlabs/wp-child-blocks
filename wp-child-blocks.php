@@ -60,3 +60,43 @@ function clwpcb_uninstall()
 }
 
 register_uninstall_hook(__FILE__, 'clwpcb_uninstall');
+
+
+/**
+ * Register child block.
+ */
+function clwpcbRegisterBlock()
+{
+
+    wp_register_script(
+        'clwpcb-script',
+        plugins_url('block.js', __FILE__),
+        array('wp-blocks', 'wp-i18n', 'wp-element'),
+        filemtime(plugin_dir_path(__FILE__) . 'block.js')
+    );
+
+    wp_register_style(
+        'clwpcb-editor-style',
+        plugins_url('editor.css', __FILE__),
+        array('wp-edit-blocks'),
+        filemtime(plugin_dir_path(__FILE__) . 'editor.css')
+    );
+
+    wp_register_style(
+        'clwpcb-style',
+        plugins_url('style.css', __FILE__),
+        array(),
+        filemtime(plugin_dir_path(__FILE__) . 'style.css')
+    );
+
+    register_block_type(
+        'clwp/child-blocks',
+        array(
+            'style'         => 'clwpcb-style',
+            'editor_style'  => 'clwpcb-editor-style',
+            'editor_script' => 'clwpcb-script'
+        )
+    );
+}
+
+add_action('init', 'clwpcbRegisterBlock');
